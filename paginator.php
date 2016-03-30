@@ -1,5 +1,5 @@
 <?php
-class PaginatorBuirlde{
+class PaginatorBuilder{
 
     static function buildPaginationArray($current_page = 1, $page_count = 1, $page_strike_length = 2){
         $paginator_array = [];
