@@ -47,17 +47,33 @@ abstract class GeneralMethod {
         );
     }
 
-    public function call_request($data = null){
-        $this->make_xml_data($data);
-        $this->make_header();
+    public function call_request(){
         $ch = curl_init($this->_url);
         $this->_curl_options[CURLOPT_POSTFIELDS] = $this->_xml_data;
         $this->_curl_options[CURLOPT_HTTPHEADER] = $this->_header;
         curl_setopt_array($ch, $this->_curl_options);
-        $output = curl_exec($ch);
-        $info = curl_getinfo($ch);
-        curl_close($ch);        
-        //exit;
+        $this->_response = curl_exec($ch);
+        $this->_curl_info = curl_getinfo($ch);
+        curl_close($ch);
+        return $this->_curl_info;
+    }
+
+    public function analiz_response(){
+        if(isset($this->_curl_info['http_code']) && $this->_curl_info['http_code']==200){
+            $your_xml_response = $this->_response;
+            $clean_xml = str_ireplace(['SOAP-ENV:', 'SOAP:'], '', $your_xml_response);
+            $result  = simplexml_load_string($clean_xml);
+            return $result;
+        }
+        else return false;
+    }
+
+    public function call_and_get_data($data = null){
+        $this->make_xml_data($data);
+        $this->make_header();
+        $this->call_request();
+        $this->_xml_object = $this->analiz_response();
+        return $this->_xml_object;
     }
 }
 
