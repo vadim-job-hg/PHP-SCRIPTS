@@ -14,7 +14,11 @@ abstract class GeneralMethod {
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_SSL_VERIFYPEER => 0,
             CURLOPT_SSL_VERIFYHOST => 0
-        );
+        ),
+        $_curl_info = array(),
+        $_response = '',
+        $_xml_object,
+        $_errors = array();
 
     function __construct($data = null){
         if($data) $this->_data = $data;
@@ -74,6 +78,18 @@ abstract class GeneralMethod {
         $this->call_request();
         $this->_xml_object = $this->analiz_response();
         return $this->_xml_object;
+    }
+
+    public function call_and_get_analiz_data($data = null){
+        $this->call_and_get_data($data);
+        if($this->_xml_object && !count($this->_errors))
+            return static::get_xml_xpress_data();
+        else
+            return false;
+    }
+
+    public function get_errors(){
+        return $this->_errors;
     }
 }
 
