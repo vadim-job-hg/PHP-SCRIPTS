@@ -12,7 +12,7 @@ class Method2 extends GeneralMethod {
         return $this->_header;
     }
 
-    public function make_xml_data($data = null){ //another xml response
+    public function make_xml_data($data = null){ //another xml request
         if($data) $this->_data = $data;
         $request_xml = '';
         foreach($this->_data as $key=>$item)
