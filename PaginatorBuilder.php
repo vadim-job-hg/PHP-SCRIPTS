@@ -1,4 +1,5 @@
 <?php
+namespace Multiple\Library;
 class PaginatorBuilder
 {
 
